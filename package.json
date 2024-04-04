@@ -1,0 +1,19 @@
+{
+  "name": "generative.js",
+  "type": "module",
+  "private": true,
+  "packageManager": "pnpm@8.6.12",
+  "engines": {
+    "pnpm": "^8.0.1"
+  },
+  "scripts": {
+    "watch": "pnpm --recursive --parallel run watch",
+    "ci:publish": "pnpm publish -r --report-summary --no-git-checks --access public ",
+    "ci:snapshot": "pnpm publish -r --report-summary --no-git-checks --access public --tag",
+    "test": "vitest run",
+    "typecheck": "pnpm --recursive --parallel run typecheck"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1"
+  }
+}

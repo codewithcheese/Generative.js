@@ -1,0 +1,33 @@
+{
+    "name": "generative.js",
+    "version": "0.0.1",
+    "scripts": {
+        "prepare": "tshy"
+    },
+    "devDependencies": {
+        "tshy": "^1.13.1"
+    },
+    "files": [
+        "src",
+        "dist"
+    ],
+    "tshy": {
+        "dialects": [
+            "esm"
+        ],
+        "exports": {
+            "./package.json": "./package.json",
+            ".": "./src/index.ts"
+        }
+    },
+    "exports": {
+        "./package.json": "./package.json",
+        ".": {
+            "import": {
+                "types": "./dist/esm/index.d.ts",
+                "default": "./dist/esm/index.js"
+            }
+        }
+    },
+    "type": "module"
+}
