@@ -145,6 +145,7 @@ test("should update message order when elements WITH KEYS are reordered", async 
 
   const { rerender, findByText } = render(renderApp(0));
   const generative = getGenerative()!;
+  await generative.waitUntilSettled();
 
   let elementA = await findByText("A");
   let elementB = await findByText("B");
@@ -216,6 +217,7 @@ test("should update message order when elements WITHOUT KEYS are reordered", asy
 
   const { rerender, findByText } = render(renderApp(0));
   const generative = getGenerative()!;
+  await generative.waitUntilSettled();
 
   let elementA = await findByText("A");
   let elementB = await findByText("B");
@@ -234,6 +236,7 @@ test("should update message order when elements WITHOUT KEYS are reordered", asy
 
   console.log("rotate right");
   rerender(renderApp(-1));
+  await generative.waitUntilSettled();
 
   elementA = await findByText("A");
   elementB = await findByText("B");
@@ -251,6 +254,7 @@ test("should update message order when elements WITHOUT KEYS are reordered", asy
 
   console.log("rotate left");
   rerender(renderApp(1));
+  await generative.waitUntilSettled();
 
   elementA = await findByText("A");
   elementB = await findByText("B");
@@ -412,6 +416,7 @@ test("should wait for async message actions depth first", async () => {
 
   const { container, findByText } = render(renderApp());
   const generative = getGenerative()!;
+  await generative.waitUntilSettled();
   // wait for A
   // await sleep(10_000);
   console.log(container.innerHTML);
