@@ -5,8 +5,6 @@ export default defineConfig({
   test: {
     globals: true,
     setupFiles: ["./test/setupTests.ts"],
-    isolate: true,
-    threads: true,
   },
   plugins: [react()],
 });
