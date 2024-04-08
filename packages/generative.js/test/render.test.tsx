@@ -1,5 +1,5 @@
 /* @vitest-environment jsdom */
-import { expect, it, test, vi } from "vitest";
+import { afterEach, expect, it, test, vi } from "vitest";
 import {
   GenerativeProvider,
   Message,
@@ -10,9 +10,14 @@ import {
   System,
 } from "../src/index.js";
 import { sleep } from "openai/core";
-import { findByText, render } from "@testing-library/react";
+import { cleanup, findByText, render } from "@testing-library/react";
 import { ErrorBoundary } from "./util/ErrorBoundary.js";
 import { getGenerative, UseGenerative } from "./util/UseGenerative.js";
+
+afterEach(() => {
+  // Clean up after each test
+  cleanup();
+});
 
 it("should call actions depth first", async () => {
   let siblingActioned = false;
