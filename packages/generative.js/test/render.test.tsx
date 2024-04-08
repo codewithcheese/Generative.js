@@ -416,10 +416,10 @@ test("should wait for async message actions depth first", async () => {
 
   const { container, findByText } = render(renderApp());
   const generative = getGenerative()!;
-  await generative.waitUntilSettled();
+  // await generative.waitUntilSettled();
   // wait for A
   // await sleep(10_000);
-  console.log(container.innerHTML);
+  // console.log(container.innerHTML);
   await findByText("A");
   let elements = container.querySelectorAll(`[data-generative-id]`);
   expect(Array.from(elements).map((e) => e.textContent)).toEqual([
