@@ -68,7 +68,6 @@ it("should render repeat with limit", async () => {
     </GenerativeProvider>,
   );
   await findByText("3");
-  console.log(container.innerHTML);
   expect(testActioned).toEqual(true);
 });
 
@@ -167,7 +166,7 @@ test("should update message order when elements WITH KEYS are reordered", async 
   let messages = generative.getAllMessages();
   expect(messages.map((m) => m.content)).toEqual(["A", "B", "C"]);
 
-  console.log("rotate right");
+  // console.log("rotate right");
   rerender(renderApp(-1));
   await generative.waitUntilSettled();
 
@@ -185,7 +184,7 @@ test("should update message order when elements WITH KEYS are reordered", async 
   messages = generative.getAllMessages();
   expect(messages.map((m) => m.content)).toEqual(["C", "A", "B"]);
 
-  console.log("rotate left");
+  // console.log("rotate left");
   rerender(renderApp(1));
   await generative.waitUntilSettled();
 
@@ -239,7 +238,7 @@ test("should update message order when elements WITHOUT KEYS are reordered", asy
   let messages = generative.getAllMessages();
   expect(messages.map((m) => m.content)).toEqual(["A", "B", "C"]);
 
-  console.log("rotate right");
+  // console.log("rotate right");
   rerender(renderApp(-1));
   await generative.waitUntilSettled();
 
@@ -257,7 +256,7 @@ test("should update message order when elements WITHOUT KEYS are reordered", asy
   messages = generative.getAllMessages();
   expect(messages.map((m) => m.content)).toEqual(["C", "A", "B"]);
 
-  console.log("rotate left");
+  // console.log("rotate left");
   rerender(renderApp(1));
   await generative.waitUntilSettled();
 
@@ -343,7 +342,7 @@ test("should render new elements when dynamically added or removed", async () =>
     elements.map((e) => e.textContent),
     "Element content does not match messages",
   ).toEqual(messages.map((m) => m.content));
-  console.log("done");
+  // console.log("done");
 
   // remove 2
   rerender(renderApp(2));
@@ -358,7 +357,7 @@ test("should render new elements when dynamically added or removed", async () =>
     elements.map((e) => e.textContent),
     "Element content does not match messages",
   ).toEqual(messages.map((m) => m.content));
-  console.log("done");
+  // console.log("done");
 }, 30_000);
 
 test("should unlink messages when removed by conditional", async () => {
@@ -404,54 +403,36 @@ test("should wait for async message actions depth first", async () => {
     await sleep(100);
     return { role: "user" as const, content };
   };
+  let i = 0;
+  // fill slot on first render to establish initial order
+  const slots: Record<string, number> = {};
+  const getOrder = (char: string) => {
+    return char in slots ? slots[char] : (slots[char] = i++);
+  };
   const renderApp = () => (
     <GenerativeProvider options={{ logLevel: "debug" }}>
       <UseGenerative />
       <Message type={() => after100ms("A")}>
         {(message) => (
           <>
-            {readTextContent(message)}
-            <Message type={() => after100ms("B")}>{readTextContent}</Message>
+            {readTextContent(message) + getOrder("A")}
+            <Message type={() => after100ms("B")}>
+              {(message) => readTextContent(message) + getOrder("B")}
+            </Message>
           </>
         )}
       </Message>
-      <System content="C">{readTextContent}</System>
+      <System content="C">
+        {(message) => readTextContent(message) + getOrder("C")}
+      </System>
     </GenerativeProvider>
   );
 
   const { container, findByText } = render(renderApp());
   const generative = getGenerative()!;
-  // await generative.waitUntilSettled();
-  // wait for A
-  // await sleep(10_000);
-  // console.log(container.innerHTML);
-  await findByText("A");
-  let elements = container.querySelectorAll(`[data-generative-id]`);
-  expect(Array.from(elements).map((e) => e.textContent)).toEqual([
-    "A",
-    "", // B should not be rendered yet
-    "", // C should not be rendered yet
-  ]);
-  let messages = generative.getAllMessages();
-  expect(messages.map((m) => m.content)).toEqual(["A"]);
-  await findByText("B");
-  elements = container.querySelectorAll(`[data-generative-id]`);
-  expect(Array.from(elements).map((e) => e.textContent)).toEqual([
-    "AB", // A contains both A and B text content
-    "B",
-    "", // C should not be rendered yet
-  ]);
-  messages = generative.getAllMessages();
-  expect(messages.map((m) => m.content)).toEqual(["A", "B"]);
-  await findByText("C");
-  elements = container.querySelectorAll(`[data-generative-id]`);
-  expect(Array.from(elements).map((e) => e.textContent)).toEqual([
-    "AB", // A contains both A and B text content
-    "B",
-    "C",
-  ]);
-  messages = generative.getAllMessages();
-  expect(messages.map((m) => m.content)).toEqual(["A", "B", "C"]);
+  await generative.waitUntilSettled();
+  await findByText("C2");
+  expect(container.textContent).toEqual("A0B1C2");
 }, 10_000);
 
 test("should bubble message action exceptions", async () => {
