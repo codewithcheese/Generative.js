@@ -12,7 +12,8 @@
     "prepare": "tshy",
     "watch": "tshy --watch",
     "test": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "e2e": "echo no tests"
   },
   "type": "module",
   "keywords": [],
