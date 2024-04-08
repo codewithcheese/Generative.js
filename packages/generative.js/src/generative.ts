@@ -267,7 +267,12 @@ export class Generative {
     getLogger("Generative:queueRender").debug(`reason=${reason}`);
     if (!this.renderInProgress) {
       this.renderInProgress = true;
-      requestIdleCallback(() => this.start(reason));
+      // @ts-ignore
+      if (globalThis.requestIdleCallback) {
+        requestIdleCallback(() => this.start(reason));
+      } else {
+        setImmediate(() => this.start(reason));
+      }
     } else {
       this.renderQueued = true;
       this.renderQueuedReason = reason;
