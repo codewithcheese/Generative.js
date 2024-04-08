@@ -14,6 +14,9 @@
     "typecheck": "pnpm --recursive --parallel run typecheck"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.27.1"
+    "@changesets/cli": "^2.27.1",
+    "@playwright/test": "^1.41.2",
+    "@types/node": "^20.11.17",
+    "vitest": "0.34.6"
   }
 }
