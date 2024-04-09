@@ -6,13 +6,12 @@ import {
   Message,
   readTextContent,
   System,
-  withMessage,
+  WorkerPool,
 } from "../src/index.js";
 import { render } from "@testing-library/react";
 import { getGenerative, UseGenerative } from "./util/UseGenerative.js";
 import { sleep } from "../src/util/sleep.js";
-import { useEffect, useMemo } from "react";
-import { withResolvers } from "../src/util/with-resolvers.js";
+import { useState } from "react";
 import { useRenderCount } from "./util/render-count-hook.js";
 
 test("should use 3 works concurrently and display `Done` when all finished", async () => {
@@ -30,38 +29,33 @@ test("should use 3 works concurrently and display `Done` when all finished", asy
     </>
   );
 
-  const Concurrently = withMessage("NOOP")(function Concurrently() {
+  function Concurrently() {
+    const [notify, setNotify] = useState("Waiting.");
+    const renderCount = useRenderCount();
     const workers = [
       createWorker(workerApp("A", "B"), "1"),
       createWorker(workerApp("C", "D"), "2"),
       createWorker(workerApp("E", "F"), "3"),
     ];
-    const renderCount = useRenderCount();
-
-    // resolve when all workers complete
-    const { resolve, promise } = useMemo(() => withResolvers<void>(), []);
-    useEffect(() => {
-      if (workers.every(([, finished]) => finished)) {
-        resolve();
-      }
-    });
-
+    function onFinished() {
+      setNotify("Done.");
+    }
     console.log(
       "Concurrently",
       "renderCount",
       renderCount,
       "finished",
-      workers.map(([, finished]) => finished),
+      workers.map((worker) => [worker.finished, worker.messages]),
+      "notify",
+      notify,
     );
 
     return (
-      <>
-        {workers.map(([worker]) => worker)}
-        {/* use promise action to wait for all workers */}
-        <Message type={() => promise}>Done.</Message>
-      </>
+      <WorkerPool workers={workers} onFinished={onFinished}>
+        {notify}
+      </WorkerPool>
     );
-  });
+  }
 
   const app = (
     <GenerativeProvider>
@@ -72,6 +66,6 @@ test("should use 3 works concurrently and display `Done` when all finished", asy
   const { findByText } = render(app);
   const generative = getGenerative()!;
   await generative.waitUntilSettled();
-  await findByText("Done.");
+  await Promise.race([findByText("Waiting."), findByText("Done.")]);
   expect(document.body.textContent).toEqual("Done.ABCDEF");
 });

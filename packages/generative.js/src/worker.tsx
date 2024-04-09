@@ -10,10 +10,16 @@ import { createPortal } from "react-dom";
 import { GenerativeProvider } from "./components/index.js";
 import { GenerativeMessage } from "./message.js";
 
+export type Worker = {
+  portal: ReactPortal;
+  finished: boolean;
+  messages: GenerativeMessage[] | null;
+};
+
 /**
  * Uses React Portal to create independent instances of Generative.
  * onFinished callback to receives messages instance has finished.
- * Check worker.test.tsx for usage. Experimental, not great DX yet.
+ * Check worker.test.tsx for usage.
  *
  * @returns [worker, finished] - worker is the React Portal instance, finished is a boolean indicating if the worker has finished.
  */
@@ -22,19 +28,16 @@ export function createWorker(
   key: string,
   options: {
     container?: HTMLElement;
-    onFinished?: (messages: GenerativeMessage[]) => void;
   } = {},
-): [ReactPortal, boolean] {
+): Worker {
   const id = useId();
   const [finished, setFinished] = useState(false);
-  const finishHandler = useCallback(
-    (messages: GenerativeMessage[]) => {
-      setFinished(true);
-      options.onFinished && options.onFinished(messages);
-    },
-    [options.onFinished],
-  );
-  const worker = useMemo(() => {
+  const [messages, setMessages] = useState<GenerativeMessage[] | null>([]);
+  const finishHandler = useCallback((messages: GenerativeMessage[]) => {
+    setMessages(messages);
+    setFinished(true);
+  }, []);
+  const portal = useMemo(() => {
     const container = options.container || document.createElement("div");
     container.setAttribute("data-generative-worker-id", id);
     document.body.appendChild(container);
@@ -47,5 +50,5 @@ export function createWorker(
     );
   }, [key]);
 
-  return [worker, finished];
+  return { portal, finished, messages };
 }
