@@ -1,5 +1,11 @@
 # generative.js
 
+## 0.0.4
+
+### Patch Changes
+
+- b07fa19: Add WorkerPool
+
 ## 0.0.3
 
 ### Patch Changes
