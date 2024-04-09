@@ -51,19 +51,15 @@ export function Message<MessageType extends GenerativeMessage>({
 }
 
 /**
- * Wraps a component with a Message component.
+ * Wraps a component with a Message component with a NOOP action.
  * For when the component should render in turn.
  */
-export function withMessage<Props extends Record<string, any>>(
-  type: GenerativeElement["type"],
-) {
-  return function (Component: FC<Props>) {
-    return function (props: Props) {
-      return (
-        <Message type={type}>
-          <Component {...props} />
-        </Message>
-      );
-    };
+export function waitTurn<Props extends {}>(Component: FC<Props>) {
+  return function (props: Props) {
+    return (
+      <Message type="NOOP">
+        <Component {...props} />
+      </Message>
+    );
   };
 }
