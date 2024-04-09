@@ -1,0 +1,23 @@
+{
+  "name": "generativejs.dev",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Generative.js docs",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "license": "Apache-2.0",
+  "dependencies": {
+    "next": "^13.0.6",
+    "nextra": "latest",
+    "nextra-theme-docs": "latest",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "20.12.6",
+    "typescript": "^5.4.4"
+  }
+}
