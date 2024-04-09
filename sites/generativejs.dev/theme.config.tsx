@@ -13,6 +13,9 @@ const config: DocsThemeConfig = {
   footer: {
     text: "",
   },
+  nextThemes: {
+    defaultTheme: "dark",
+  },
 };
 
 export default config;
