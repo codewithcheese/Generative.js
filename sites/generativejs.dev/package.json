@@ -10,9 +10,13 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
+    "@codesandbox/sandpack-react": "^2.13.7",
+    "@fontsource-variable/inter": "^5.0.16",
     "next": "^13.0.6",
+    "next-mdx-remote": "^4.4.1",
     "nextra": "latest",
     "nextra-theme-docs": "latest",
+    "multiline-ts": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
