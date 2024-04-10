@@ -2,7 +2,7 @@ import React from "react";
 import { DocsThemeConfig } from "nextra-theme-docs";
 
 const config: DocsThemeConfig = {
-  logo: <span>Generative.js</span>,
+  logo: <span style={{ fontWeight: "500" }}>Generative.js</span>,
   project: {
     link: "https://github.com/codewithcheese/Generative.js",
   },
