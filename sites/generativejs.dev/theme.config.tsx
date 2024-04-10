@@ -11,7 +11,7 @@ const config: DocsThemeConfig = {
   // },
   docsRepositoryBase: "https://github.com/codewithcheese/Generative.js",
   footer: {
-    text: "",
+    text: `Made with 🧀.`,
   },
   nextThemes: {
     defaultTheme: "dark",
