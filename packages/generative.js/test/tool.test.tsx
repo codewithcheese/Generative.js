@@ -29,7 +29,7 @@ test("should use tool", async () => {
     } else {
       return (
         <Assistant
-          onBeforeResolved={(message) => {
+          onMessage={(message) => {
             const call = getToolCall(tool, message);
             assert(call);
             setSum(call.data.sum);

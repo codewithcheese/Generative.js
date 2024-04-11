@@ -13,23 +13,20 @@ export function Message<MessageType extends GenerativeMessage>({
   className,
   children,
   deps = [],
-  onBeforeResolved,
-  onBeforeFinalized,
+  onMessage,
 }: {
   className?: string;
   type: GenerativeElement["type"];
   typeName?: string;
   children?: ReactNode | MessageRenderFunc<MessageType>;
   deps?: DependencyList;
-  onBeforeResolved?: (message: MessageType) => void;
-  onBeforeFinalized?: (message: MessageType) => void;
+  onMessage?: (message: MessageType) => void;
 }) {
   const { id, ref, message, ready, complete } = useGenerative<MessageType>({
     type,
     typeName,
     deps,
-    onBeforeResolved,
-    onBeforeFinalized,
+    onMessage,
   });
 
   // const renderCount = useRef(0);

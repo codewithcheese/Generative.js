@@ -46,8 +46,7 @@ export type useGenerativeProps<MessageType extends GenerativeMessage> = {
   type: GenerativeElement["type"];
   typeName?: string;
   deps?: DependencyList;
-  onBeforeResolved?: (message: MessageType) => void;
-  onBeforeFinalized?: (message: MessageType) => void;
+  onMessage?: (message: MessageType) => void;
 };
 
 export type useGenerativeReturnType<MessageType extends GenerativeMessage> = {
@@ -64,8 +63,7 @@ export function useGenerative<MessageType extends GenerativeMessage>({
   type,
   typeName = "anonymous",
   deps = [],
-  onBeforeResolved,
-  onBeforeFinalized,
+  onMessage,
 }: useGenerativeProps<MessageType>): useGenerativeReturnType<MessageType> {
   const logger = getLogger("useGenerative");
   const id = useId();
@@ -121,7 +119,7 @@ export function useGenerative<MessageType extends GenerativeMessage>({
         if (node.state.message) {
           setMessage(message);
         }
-        onBeforeResolved && onBeforeResolved(message);
+        onMessage && onMessage(message);
         setStatus(node.status);
       },
       onError: (error: unknown) => {
@@ -141,7 +139,6 @@ export function useGenerative<MessageType extends GenerativeMessage>({
   // finalized after render
   useLayoutEffect(() => {
     if (status === "RESOLVED") {
-      onBeforeFinalized && onBeforeFinalized(message as MessageType);
       generative.finalize(id);
       setStatus("FINALIZED");
     }
