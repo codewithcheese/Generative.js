@@ -153,7 +153,7 @@ export function Decision({
         <Assistant
           toolChoice={selectPathTool}
           tools={tools}
-          onBeforeResolved={onBeforeResolved}
+          onMessage={onBeforeResolved}
         ></Assistant>
       </>
     );

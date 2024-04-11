@@ -22,8 +22,7 @@ export function Assistant({
   requestOptions = {},
   clientOptions = {},
   children,
-  onBeforeResolved,
-  onBeforeFinalized,
+  onMessage,
 }: {
   content?: string; // set content to use Assistant as literal, no completion will be requested
   className?: string;
@@ -33,8 +32,7 @@ export function Assistant({
   requestOptions?: Partial<ChatCompletionCreateParamsStreaming>;
   clientOptions?: ClientOptions;
   children?: ReactNode | MessageRenderFunc<AssistantMessage>;
-  onBeforeResolved?: (message: AssistantMessage) => void;
-  onBeforeFinalized?: (message: AssistantMessage) => void;
+  onMessage?: (message: AssistantMessage) => void;
 }) {
   const action = useCallback<ActionType>(
     async ({ messages, signal }) =>
@@ -54,8 +52,7 @@ export function Assistant({
       className={className}
       type={content ? { role: "assistant", content } : action}
       typeName="Assistant"
-      onBeforeResolved={onBeforeResolved}
-      onBeforeFinalized={onBeforeFinalized}
+      onMessage={onMessage}
     >
       {children}
     </Message>
