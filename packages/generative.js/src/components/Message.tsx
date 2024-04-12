@@ -4,6 +4,7 @@ import { GenerativeElement, GenerativeMessage } from "../index.js";
 
 export const MessageContext = createContext<{
   message: GenerativeMessage | null;
+  complete: boolean;
 }>(null!);
 
 export type MessageRenderFunc<MessageType extends GenerativeMessage> = (
@@ -33,18 +34,10 @@ export function Message<MessageType extends GenerativeMessage>({
     onMessage,
   });
 
-  // const renderCount = useRef(0);
-  // useEffect(() => {
-  //   renderCount.current++;
-  // });
-  // console.log(
-  //   `Generative id=${id} isPending=${isPending} renderCount=${renderCount.current}`,
-  // );
-
   return (
     <div data-generative-id={id} ref={ref} className={className}>
       {ready && (
-        <MessageContext.Provider value={{ message }}>
+        <MessageContext.Provider value={{ message, complete }}>
           {typeof children === "function"
             ? children(message!, complete)
             : children}

@@ -54,11 +54,16 @@ function Chat() {
 }
 
 function MessageBubble() {
-  const message = useMessage();
+  const { message, complete } = useMessage();
   if (!message) {
     return "...";
   }
-  return <div>{readTextContent(message)}</div>;
+  return (
+    <div>
+      {readTextContent(message)}
+      {!complete && " #"}
+    </div>
+  );
 }
 
 export default App;

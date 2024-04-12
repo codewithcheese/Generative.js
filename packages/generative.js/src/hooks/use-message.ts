@@ -8,5 +8,5 @@ export function useMessage() {
       "Cannot access message. Usage of useMessage() must be wrapped by a message provider. e.g. System, User, Assistant",
     );
   }
-  return context.message;
+  return context;
 }

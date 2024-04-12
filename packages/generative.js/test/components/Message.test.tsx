@@ -21,11 +21,16 @@ test("should render message with render function", async () => {
 
 test("should render message with message context", async () => {
   function MessageBubble() {
-    const message = useMessage();
+    const { message, complete } = useMessage();
     if (!message) {
       return "...";
     }
-    return readTextContent(message);
+    return (
+      <div>
+        {readTextContent(message)}
+        {complete ? "." : "#"}
+      </div>
+    );
   }
   const { findByText } = render(
     <GenerativeProvider options={{ logLevel: "debug" }}>
@@ -34,5 +39,5 @@ test("should render message with message context", async () => {
       </Message>
     </GenerativeProvider>,
   );
-  await findByText("A");
+  await findByText("A.");
 });
