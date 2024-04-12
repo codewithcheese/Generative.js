@@ -1,6 +1,10 @@
-import { DependencyList, FC, ReactNode } from "react";
+import { createContext, DependencyList, FC, ReactNode } from "react";
 import { useGenerative } from "../hooks/index.js";
 import { GenerativeElement, GenerativeMessage } from "../index.js";
+
+export const MessageContext = createContext<{
+  message: GenerativeMessage | null;
+}>(null!);
 
 export type MessageRenderFunc<MessageType extends GenerativeMessage> = (
   message: MessageType,
@@ -39,10 +43,13 @@ export function Message<MessageType extends GenerativeMessage>({
 
   return (
     <div data-generative-id={id} ref={ref} className={className}>
-      {ready &&
-        (typeof children === "function"
-          ? children(message!, complete)
-          : children)}
+      {ready && (
+        <MessageContext.Provider value={{ message }}>
+          {typeof children === "function"
+            ? children(message!, complete)
+            : children}
+        </MessageContext.Provider>
+      )}
     </div>
   );
 }
