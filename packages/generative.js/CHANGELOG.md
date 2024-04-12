@@ -1,5 +1,12 @@
 # generative.js
 
+## 0.0.5
+
+### Patch Changes
+
+- a08a0f2: Rename onBeforeResolved to onMessage. Remove onBeforeFinalized.
+- 0ca21ff: Add MessageContext and useMessage hook for message handling UI components
+
 ## 0.0.4
 
 ### Patch Changes
