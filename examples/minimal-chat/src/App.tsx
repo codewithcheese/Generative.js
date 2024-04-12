@@ -3,9 +3,24 @@ import {
   Assistant,
   GenerativeProvider,
   readTextContent,
+  useMessage,
   User,
 } from "generative.js";
 import { ErrorBoundary } from "react-error-boundary";
+
+function App() {
+  return (
+    <ErrorBoundary
+      fallbackRender={(props) =>
+        props.error?.message || "Unknown error. Check the console."
+      }
+    >
+      <GenerativeProvider>
+        <Chat />
+      </GenerativeProvider>
+    </ErrorBoundary>
+  );
+}
 
 function Chat() {
   const [elements, setElements] = useState<ReactNode[]>([]);
@@ -16,8 +31,12 @@ function Chat() {
     const text = data.get("text") as string;
     setElements((e) => {
       return e.concat([
-        <User content={text}>{(message) => readTextContent(message)}</User>,
-        <Assistant>{(message) => message.content}</Assistant>,
+        <User content={text}>
+          <MessageBubble />
+        </User>,
+        <Assistant>
+          <MessageBubble />
+        </Assistant>,
       ]);
     });
     return false;
@@ -34,17 +53,16 @@ function Chat() {
   );
 }
 
-function App() {
+function MessageBubble() {
+  const { message, complete } = useMessage();
+  if (!message) {
+    return "...";
+  }
   return (
-    <ErrorBoundary
-      fallbackRender={(props) =>
-        props.error?.message || "Unknown error. Check the console."
-      }
-    >
-      <GenerativeProvider>
-        <Chat />
-      </GenerativeProvider>
-    </ErrorBoundary>
+    <div>
+      {readTextContent(message)}
+      {!complete && " #"}
+    </div>
   );
 }
 
