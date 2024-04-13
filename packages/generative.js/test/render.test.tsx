@@ -24,7 +24,9 @@ it("should call actions depth first", async () => {
   const { findByText } = render(
     <GenerativeProvider options={{ logLevel: "debug" }}>
       <Message type={() => ({ role: "user", content: "A" })}>
-        <Message type={() => ({ role: "assistant", content: "B" })} />
+        <Message type={() => ({ role: "assistant", content: "B" })}>
+          {readTextContent}
+        </Message>
       </Message>
       <Message
         type={({ messages }) => {
@@ -48,7 +50,7 @@ it("should render repeat with limit", async () => {
   const TestMessages = () => {
     return (
       <Message
-        type={({ messages, signal }) => {
+        type={({ messages }) => {
           testActioned = true;
           expect(messages.map((m) => m.content)).toEqual(["1", "2", "1", "2"]);
         }}
@@ -58,7 +60,7 @@ it("should render repeat with limit", async () => {
     );
   };
 
-  const { findByText, container } = render(
+  const { findByText } = render(
     <GenerativeProvider options={{ logLevel: "debug" }}>
       <Repeat limit={2}>
         <System content="1">1</System>

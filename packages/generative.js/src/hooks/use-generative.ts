@@ -18,9 +18,14 @@ export function findDOMAncestor(
   element: HTMLElement,
   attrName: string = "data-generative-id",
 ): AncestorRecord {
+  const root = { id: "root", type: "parent" as const };
   // Check previous siblings
   let sibling = element.previousElementSibling;
   while (sibling) {
+    if (sibling.getAttribute("data-generative-provider")) {
+      // stop at closest provider
+      return root;
+    }
     const id = sibling.getAttribute(attrName);
     if (id != null) {
       return { id, type: "sibling" };
@@ -31,6 +36,10 @@ export function findDOMAncestor(
   // Check parent elements
   let parent = element.parentElement;
   while (parent) {
+    if (parent.getAttribute("data-generative-provider")) {
+      // stop at closest provider
+      return root;
+    }
     const id = parent.getAttribute(attrName);
     if (id != null) {
       return { id, type: "parent" };
@@ -39,7 +48,7 @@ export function findDOMAncestor(
   }
 
   // No matching element found
-  return { id: "root", type: "parent" };
+  return root;
 }
 
 export type useGenerativeProps<MessageType extends GenerativeMessage> = {

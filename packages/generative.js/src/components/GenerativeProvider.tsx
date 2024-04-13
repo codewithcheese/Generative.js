@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useId, useState } from "react";
 import { Generative, GenerativeOptions } from "../generative.js";
 import { GenerativeMessage } from "../message.js";
 
@@ -18,6 +18,7 @@ export function GenerativeProvider({
   options?: GenerativeOptions;
   handlers?: { onFinished?: (messages: GenerativeMessage[]) => void };
 }) {
+  const id = useId();
   const [abortController] = useState(new AbortController());
   const [context] = useState<GenerativeContextType>({
     generative: new Generative(options, handlers),
@@ -25,6 +26,7 @@ export function GenerativeProvider({
   });
   return (
     <GenerativeContext.Provider value={context}>
+      <span data-generative-provider={id}></span>
       {children}
     </GenerativeContext.Provider>
   );
