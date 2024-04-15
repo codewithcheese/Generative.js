@@ -3,6 +3,6 @@ export default defineConfig({
   test: {
     globals: true,
     setupFiles: ["./setupTests.ts"],
-    include: ["**/test/*.test.*"],
+    include: ["**/*.test.*"],
   },
 });
