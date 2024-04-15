@@ -16,7 +16,9 @@ type optionsMap = {
   };
 };
 
-export function Assistant<T extends "openai" | "anthropic">({
+export type AssistantApi = "openai" | "anthropic";
+
+export function Assistant<T extends AssistantApi>({
   api,
   ...props
 }: {

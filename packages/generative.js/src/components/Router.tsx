@@ -9,6 +9,7 @@ import {
 } from "react";
 import {
   Assistant,
+  AssistantApi,
   AssistantMessage,
   createTool,
   getToolCall,
@@ -113,9 +114,11 @@ function createSelectPathTool(paths: string[], currentPath: string) {
 export function Decision({
   instruction,
   operation = "append",
+  api = "openai",
 }: {
   instruction: string;
   operation?: "append" | "goto";
+  api: AssistantApi;
 }) {
   const [decision, setDecision] = useState<{
     reasoning: string;
@@ -151,6 +154,7 @@ export function Decision({
       <>
         <System content={instruction} />
         <Assistant
+          api={api}
           toolChoice={selectPathTool}
           tools={tools}
           onMessage={onBeforeResolved}
