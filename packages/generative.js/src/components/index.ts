@@ -1,3 +1,4 @@
+export * from "./AnthropicAssistant.js";
 export * from "./Assistant.js";
 export * from "./Repeat.js";
 export * from "./Router.js";

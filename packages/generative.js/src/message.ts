@@ -14,10 +14,7 @@ export type MessageTextContent = {
   text: string;
 };
 
-export type MessageContentItem = (
-  | MessageTextContent
-  | MessageImageUrlContent
-)[];
+export type MessageContentItem = MessageTextContent | MessageImageUrlContent;
 
 export type ToolCall = {
   id: string;
@@ -35,7 +32,7 @@ export type FunctionCall = {
 
 export type UserMessage = {
   role: "user";
-  content: string | MessageContentItem;
+  content: string | MessageContentItem[];
 };
 
 export type AssistantMessage = {
@@ -84,7 +81,7 @@ export function isTextContent(content: unknown): content is MessageTextContent {
   );
 }
 
-export function isImageContent(
+export function isImageUrlContent(
   content: unknown,
 ): content is MessageImageUrlContent {
   return (
