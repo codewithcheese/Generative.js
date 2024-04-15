@@ -24,11 +24,12 @@ import {
   MessageCreateParamsNonStreaming,
   MessageCreateParamsStreaming,
 } from "@anthropic-ai/sdk/resources/beta/tools/messages";
+import { MessageCreateParamsBase } from "@anthropic-ai/sdk/resources/messages";
 
 export type AnthropicAssistantProps = {
   content?: string; // set content to use Assistant as literal, no completion will be requested
   className?: string;
-  model?: string;
+  model?: MessageCreateParamsBase["model"];
   toolChoice?: "auto" | "none" | Tool<any>;
   tools?: Tool<any>[];
   requestOptions?: Partial<MessageCreateParamsStreaming>;

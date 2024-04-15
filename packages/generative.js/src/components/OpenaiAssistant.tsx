@@ -16,7 +16,7 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 export type OpenaiAssistantProps = {
   content?: string; // set content to use Assistant as literal, no completion will be requested
   className?: string;
-  model?: string;
+  model?: ChatCompletionCreateParamsStreaming["model"];
   toolChoice?: "auto" | "none" | Tool<any>;
   tools?: Tool<any>[];
   requestOptions?: Partial<ChatCompletionCreateParamsStreaming>;
