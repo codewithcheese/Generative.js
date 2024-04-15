@@ -2,4 +2,4 @@
 "generative.js": patch
 ---
 
-Add AnthropicAssistant, make Assisant generic
+Add AnthropicAssistant, make Assistant generic
