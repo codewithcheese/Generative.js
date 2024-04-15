@@ -29,6 +29,7 @@ test("should use tool", async () => {
     } else {
       return (
         <Assistant
+          api="openai"
           onMessage={(message) => {
             const call = getToolCall(tool, message);
             assert(call);
@@ -87,7 +88,11 @@ test("should use multiple tools", async () => {
           count: 42
         `}
         />
-        <Assistant toolChoice={"auto"} tools={[countTool, nameTool]}>
+        <Assistant
+          api="openai"
+          toolChoice={"auto"}
+          tools={[countTool, nameTool]}
+        >
           {(message) => {
             return message.tool_calls?.length;
           }}
