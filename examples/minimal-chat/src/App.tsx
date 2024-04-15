@@ -34,7 +34,7 @@ function Chat() {
         <User content={text}>
           <MessageBubble />
         </User>,
-        <Assistant>
+        <Assistant api="openai">
           <MessageBubble />
         </Assistant>,
       ]);
