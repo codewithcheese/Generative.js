@@ -1,5 +1,12 @@
 # generative.js
 
+## 0.0.6
+
+### Patch Changes
+
+- a7d8321: Support for multiple and nested generatives per render
+- 85ee63e: Add AnthropicAssistant, make Assistant generic
+
 ## 0.0.5
 
 ### Patch Changes
