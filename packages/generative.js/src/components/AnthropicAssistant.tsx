@@ -25,6 +25,18 @@ import {
   MessageCreateParamsStreaming,
 } from "@anthropic-ai/sdk/resources/beta/tools/messages";
 
+export type AnthropicAssistantProps = {
+  content?: string; // set content to use Assistant as literal, no completion will be requested
+  className?: string;
+  model?: string;
+  toolChoice?: "auto" | "none" | Tool<any>;
+  tools?: Tool<any>[];
+  requestOptions?: Partial<MessageCreateParamsStreaming>;
+  clientOptions?: Partial<AnthropicClientOptions>;
+  children?: ReactNode | MessageRenderFunc<AssistantMessage>;
+  onMessage?: (message: AssistantMessage) => void;
+};
+
 export function AnthropicAssistant({
   content,
   className,
@@ -35,17 +47,7 @@ export function AnthropicAssistant({
   clientOptions = {},
   children,
   onMessage,
-}: {
-  content?: string; // set content to use Assistant as literal, no completion will be requested
-  className?: string;
-  model?: string;
-  toolChoice?: "auto" | "none" | Tool<any>;
-  tools?: Tool<any>[];
-  requestOptions?: Partial<MessageCreateParamsStreaming>;
-  clientOptions?: Partial<AnthropicClientOptions>;
-  children?: ReactNode | MessageRenderFunc<AssistantMessage>;
-  onMessage?: (message: AssistantMessage) => void;
-}) {
+}: AnthropicAssistantProps) {
   const action = useCallback<ActionType>(
     async ({ messages, signal }) => {
       return fetchAnthropicCompletion({
