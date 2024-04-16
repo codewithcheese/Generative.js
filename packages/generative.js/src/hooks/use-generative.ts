@@ -1,4 +1,5 @@
 import {
+  createContext,
   DependencyList,
   MutableRefObject,
   useContext,
@@ -12,11 +13,13 @@ import { GenerativeContext, NodeStatus } from "../index.js";
 import { getLogger } from "../util/log.js";
 import { GenerativeMessage } from "../message.js";
 
+export const ParentContext = createContext<{ id: string }>(null!);
+
 type AncestorRecord = { id: string; type: "parent" | "sibling" };
 
-export function findDOMAncestor(
+export function findAncestor(
   element: HTMLElement,
-  attrName: string = "data-generative-id",
+  parentId: string | null,
 ): AncestorRecord {
   const root = { id: "root", type: "parent" as const };
   // Check previous siblings
@@ -24,30 +27,39 @@ export function findDOMAncestor(
   while (sibling) {
     if (sibling.getAttribute("data-generative-provider")) {
       // stop at closest provider
-      return root;
+      break;
     }
-    const id = sibling.getAttribute(attrName);
-    if (id != null) {
+    const id = sibling.getAttribute("data-generative-id");
+    if (
+      id != null &&
+      // if share the same parent then is sibling
+      sibling.getAttribute("data-generative-parent-id") === parentId
+    ) {
       return { id, type: "sibling" };
     }
     sibling = sibling.previousElementSibling;
   }
 
-  // Check parent elements
-  let parent = element.parentElement;
-  while (parent) {
-    if (parent.getAttribute("data-generative-provider")) {
-      // stop at closest provider
-      return root;
-    }
-    const id = parent.getAttribute(attrName);
-    if (id != null) {
-      return { id, type: "parent" };
-    }
-    parent = parent.parentElement;
+  // if no siblings then parent is ancestor
+  if (parentId) {
+    return { id: parentId, type: "parent" };
   }
 
-  // No matching element found
+  // // Check parent elements
+  // let parent = element.parentElement;
+  // while (parent) {
+  //   if (parent.getAttribute("data-generative-provider")) {
+  //     // stop at closest provider
+  //     return root;
+  //   }
+  //   const id = parent.getAttribute("data-generative-id");
+  //   if (id != null && id === parentId) {
+  //     return { id, type: "parent" };
+  //   }
+  //   parent = parent.parentElement;
+  // }
+
+  // no sibling no parent
   return root;
 }
 
@@ -60,6 +72,7 @@ export type useGenerativeProps<MessageType extends GenerativeMessage> = {
 
 export type useGenerativeReturnType<MessageType extends GenerativeMessage> = {
   id: string;
+  parentId: string | null;
   ref: MutableRefObject<any>;
   element: GenerativeElement | null;
   message: MessageType | null;
@@ -90,6 +103,8 @@ export function useGenerative<MessageType extends GenerativeMessage>({
     );
   }
   const { generative } = context;
+  const parent = useContext(ParentContext);
+  const parentId = parent ? parent.id : null;
 
   useLayoutEffect(() => {
     // fixme use internal status
@@ -102,7 +117,7 @@ export function useGenerative<MessageType extends GenerativeMessage>({
       logger.error("data-generative-id attribute not set", ref.current);
       throw Error("useGenerative: data-generative-id attribute not set");
     }
-    const ancestor = findDOMAncestor(ref.current);
+    const ancestor = findAncestor(ref.current, parentId);
     setAncestor(ancestor);
     const element = generative.upsert({
       id,
@@ -161,7 +176,7 @@ export function useGenerative<MessageType extends GenerativeMessage>({
     if (!ancestor) {
       return;
     }
-    const currentAncestor = findDOMAncestor(ref.current);
+    const currentAncestor = findAncestor(ref.current, parentId);
     if (currentAncestor.id !== ancestor.id) {
       setAncestor(currentAncestor);
       generative.updateAncestor(id, typeName, currentAncestor, ancestor);
@@ -178,5 +193,5 @@ export function useGenerative<MessageType extends GenerativeMessage>({
     status === "STREAMING" || status === "RESOLVED" || status === "FINALIZED";
   const complete = status === "RESOLVED" || status === "FINALIZED";
 
-  return { id, ref, status, element, message, ready, complete };
+  return { id, parentId, ref, status, element, message, ready, complete };
 }

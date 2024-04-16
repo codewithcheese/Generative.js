@@ -1,4 +1,8 @@
-import { useAfterChildren, useGenerative } from "../hooks/index.js";
+import {
+  ParentContext,
+  useAfterChildren,
+  useGenerative,
+} from "../hooks/index.js";
 import { Fragment, ReactNode, useEffect, useRef, useState } from "react";
 import { getLogger } from "../util/log.js";
 
@@ -19,7 +23,7 @@ export function Repeat({
   children,
 }: RepeatProps) {
   const logger = getLogger("Repeat");
-  const { id, ref, element, ready, complete } = useGenerative({
+  const { id, parentId, ref, element, ready, complete } = useGenerative({
     type: "NOOP",
     typeName: "Repeat",
   });
@@ -53,19 +57,26 @@ export function Repeat({
   });
 
   return (
-    <div data-generative-id={id} ref={ref} className={className}>
-      {ready &&
-        Array(iteration)
-          .fill(true)
-          .map((_, index) => {
-            logger.debug(`JSX iteration=${index}`);
-            return (
-              <Fragment key={index}>
-                {children}
-                {/*{Children.map(children, (child) => cloneElement(child))}*/}
-              </Fragment>
-            );
-          })}
+    <div
+      data-generative-id={id}
+      data-generative-parent-id={parentId}
+      ref={ref}
+      className={className}
+    >
+      <ParentContext.Provider value={{ id }}>
+        {ready &&
+          Array(iteration)
+            .fill(true)
+            .map((_, index) => {
+              logger.debug(`JSX iteration=${index}`);
+              return (
+                <Fragment key={index}>
+                  {children}
+                  {/*{Children.map(children, (child) => cloneElement(child))}*/}
+                </Fragment>
+              );
+            })}
+      </ParentContext.Provider>
     </div>
   );
 }
