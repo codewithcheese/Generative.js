@@ -1,0 +1,7 @@
+[
+    {
+        "name": "Chat MVP",
+        "slug": "minimal-chat",
+        "files": ["App.tsx"]
+    }
+]
