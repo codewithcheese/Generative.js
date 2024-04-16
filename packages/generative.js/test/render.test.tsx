@@ -56,7 +56,7 @@ it("should render repeat with limit", async () => {
           expect(messages.map((m) => m.content)).toEqual(["1", "2", "1", "2"]);
         }}
       >
-        3
+        <div>3</div>
       </Message>
     );
   };

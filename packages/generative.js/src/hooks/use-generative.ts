@@ -42,23 +42,6 @@ export function findAncestor(
 
   // if no siblings then parent is ancestor
   return { id: parentId, type: "parent" };
-
-  // // Check parent elements
-  // let parent = element.parentElement;
-  // while (parent) {
-  //   if (parent.getAttribute("data-generative-provider")) {
-  //     // stop at closest provider
-  //     return root;
-  //   }
-  //   const id = parent.getAttribute("data-generative-id");
-  //   if (id != null && id === parentId) {
-  //     return { id, type: "parent" };
-  //   }
-  //   parent = parent.parentElement;
-  // }
-
-  // no sibling no parent
-  // return root;
 }
 
 export type useGenerativeProps<MessageType extends GenerativeMessage> = {
@@ -66,6 +49,7 @@ export type useGenerativeProps<MessageType extends GenerativeMessage> = {
   typeName?: string;
   deps?: DependencyList;
   onMessage?: (message: MessageType) => void;
+  onAfterChildren?: () => void;
 };
 
 export type useGenerativeReturnType<MessageType extends GenerativeMessage> = {
@@ -83,6 +67,7 @@ export function useGenerative<MessageType extends GenerativeMessage>({
   typeName = "anonymous",
   deps = [],
   onMessage,
+  onAfterChildren,
 }: useGenerativeProps<MessageType>): useGenerativeReturnType<MessageType> {
   const logger = getLogger("useGenerative");
   const parent = useContext(ParentContext);
@@ -121,6 +106,9 @@ export function useGenerative<MessageType extends GenerativeMessage>({
       type,
       typeName,
       ancestor,
+      props: {
+        afterChildren: onAfterChildren,
+      },
       onStreaming: (node) => {
         if (node.state.message) {
           setMessage(node.state.message as MessageType);
