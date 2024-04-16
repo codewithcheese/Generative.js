@@ -1,5 +1,14 @@
 # @generative.js/minimal-chat
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [4a7deeb]
+- Updated dependencies [806f71b]
+- Updated dependencies [2a46637]
+  - generative.js@0.0.7
+
 ## 0.0.2
 
 ### Patch Changes

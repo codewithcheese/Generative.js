@@ -1,5 +1,14 @@
 # generative.js
 
+## 0.0.7
+
+### Patch Changes
+
+- 4a7deeb: Use spans to mark generative context instead of nested div.
+  Use hierarchical ids to evaluate previous ancestor.
+- 806f71b: Remove className props, no longer relevant since using span markers
+- 2a46637: Pass afterChildren handler to useGenerative, remove separate useAfterChildren hook
+
 ## 0.0.6
 
 ### Patch Changes
