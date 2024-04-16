@@ -19,6 +19,7 @@ export function Message<MessageType extends GenerativeMessage>({
   children,
   deps = [],
   onMessage,
+  onAfterChildren,
 }: {
   className?: string;
   type: GenerativeElement["type"];
@@ -26,12 +27,14 @@ export function Message<MessageType extends GenerativeMessage>({
   children?: ReactNode | MessageRenderFunc<MessageType>;
   deps?: DependencyList;
   onMessage?: (message: MessageType) => void;
+  onAfterChildren?: () => void;
 }) {
   const { id, ref, message, ready, complete } = useGenerative<MessageType>({
     type,
     typeName,
     deps,
     onMessage,
+    onAfterChildren,
   });
 
   return (
