@@ -19,9 +19,8 @@ type AncestorRecord = { id: string; type: "parent" | "sibling" };
 
 export function findAncestor(
   element: HTMLElement,
-  parentId: string | null,
+  parentId: string,
 ): AncestorRecord {
-  const root = { id: "root", type: "parent" as const };
   // Check previous siblings
   let sibling = element.previousElementSibling;
   while (sibling) {
@@ -41,9 +40,7 @@ export function findAncestor(
   }
 
   // if no siblings then parent is ancestor
-  if (parentId) {
-    return { id: parentId, type: "parent" };
-  }
+  return { id: parentId, type: "parent" };
 
   // // Check parent elements
   // let parent = element.parentElement;
@@ -60,7 +57,7 @@ export function findAncestor(
   // }
 
   // no sibling no parent
-  return root;
+  // return root;
 }
 
 export type useGenerativeProps<MessageType extends GenerativeMessage> = {
@@ -89,6 +86,8 @@ export function useGenerative<MessageType extends GenerativeMessage>({
 }: useGenerativeProps<MessageType>): useGenerativeReturnType<MessageType> {
   const logger = getLogger("useGenerative");
   const id = useId();
+  const parent = useContext(ParentContext);
+  const parentId = parent.id;
   const ref = useRef<HTMLDivElement>(null);
   const [status, setStatus] = useState<NodeStatus>("PENDING");
   const [ancestor, setAncestor] = useState<AncestorRecord | null>(null);
@@ -103,8 +102,6 @@ export function useGenerative<MessageType extends GenerativeMessage>({
     );
   }
   const { generative } = context;
-  const parent = useContext(ParentContext);
-  const parentId = parent ? parent.id : null;
 
   useLayoutEffect(() => {
     // fixme use internal status
