@@ -13,18 +13,21 @@ import { getGenerative, UseGenerative } from "./util/UseGenerative.js";
 import { sleep } from "../src/util/sleep.js";
 import { useState } from "react";
 import { useRenderCount } from "./util/render-count-hook.js";
+import { ShowMessage } from "./util/show-message.js";
 
 test("should use 3 works concurrently and display `Done` when all finished", async () => {
   const workerApp = (system: string, completion: string) => (
     <>
-      <System content={system}>{readTextContent}</System>
+      <System content={system}>
+        <ShowMessage />
+      </System>
       <Message
         type={async () => {
           await sleep(500);
           return { role: "assistant", content: completion };
         }}
       >
-        {readTextContent}
+        <ShowMessage />
       </Message>
     </>
   );

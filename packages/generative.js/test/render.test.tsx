@@ -13,16 +13,12 @@ import { sleep } from "openai/core";
 import { cleanup, findByText, render } from "@testing-library/react";
 import { ErrorBoundary } from "./util/ErrorBoundary.js";
 import { getGenerative, UseGenerative } from "./util/UseGenerative.js";
+import { ShowMessage } from "./util/show-message.js";
 
 afterEach(() => {
   // Clean up after each test
   cleanup();
 });
-
-function PrintMessage() {
-  const { message } = useMessage();
-  return <div>{message && readTextContent(message)}</div>;
-}
 
 it("should call actions depth first", async () => {
   let siblingActioned = false;
@@ -221,13 +217,13 @@ test("should update message order when elements WITHOUT KEYS are reordered", asy
       <UseGenerative />
       <Rotate offset={offset}>
         <System content="A">
-          <PrintMessage />
+          <ShowMessage />
         </System>
         <System content="B">
-          <PrintMessage />
+          <ShowMessage />
         </System>
         <System content="C">
-          <PrintMessage />
+          <ShowMessage />
         </System>
       </Rotate>
     </GenerativeProvider>
@@ -298,7 +294,7 @@ test("should render new elements when dynamically added or removed", async () =>
       <UseGenerative />
       <Repeater times={times}>
         <System content="A">
-          <PrintMessage />
+          <ShowMessage />
         </System>
       </Repeater>
     </GenerativeProvider>

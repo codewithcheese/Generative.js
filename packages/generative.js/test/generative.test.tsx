@@ -8,6 +8,7 @@ import {
 } from "../src/index.js";
 import { getGenerative, UseGenerative } from "./util/UseGenerative.js";
 import { render } from "@testing-library/react";
+import { ShowMessage } from "./util/show-message.js";
 
 test("should wait for input before generative is finished", async () => {
   const app = (
@@ -30,10 +31,14 @@ test("should support multiple providers in a single render", async () => {
   const app = (
     <>
       <GenerativeProvider options={{ logLevel: "debug" }}>
-        <System content="A">{readTextContent}</System>
+        <System content="A">
+          <ShowMessage />
+        </System>
       </GenerativeProvider>
       <GenerativeProvider options={{ logLevel: "debug" }}>
-        <System content="B">{readTextContent}</System>
+        <System content="B">
+          <ShowMessage />
+        </System>
       </GenerativeProvider>
     </>
   );
@@ -46,9 +51,13 @@ test("should support nested providers in a single render", async () => {
   const app = (
     <>
       <GenerativeProvider options={{ logLevel: "debug" }}>
-        <System content="A">{readTextContent}</System>
+        <System content="A">
+          <ShowMessage />
+        </System>
         <GenerativeProvider options={{ logLevel: "debug" }}>
-          <System content="B">{readTextContent}</System>
+          <System content="B">
+            <ShowMessage />
+          </System>
         </GenerativeProvider>
       </GenerativeProvider>
     </>
