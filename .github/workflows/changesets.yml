@@ -24,7 +24,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install pnpm
-        run: npm i pnpm@latest -g
+        run: npm i pnpm@^8 -g
 
       - name: Setup pnpm config
         run: pnpm config set store-dir $PNPM_CACHE_FOLDER
