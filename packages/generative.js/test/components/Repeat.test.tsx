@@ -12,6 +12,7 @@ import {
 import { sleep } from "../../src/util/sleep.js";
 import { render } from "@testing-library/react";
 import { getGenerative, UseGenerative } from "../util/UseGenerative.js";
+import { ShowMessage } from "../util/show-message.js";
 
 function Async({ children }: any) {
   return (
@@ -67,13 +68,17 @@ test("should render all iterations before next message", async () => {
     <GenerativeProvider options={{ logLevel: "info" }}>
       <UseGenerative />
       <Repeat limit={2}>
-        <System content="A">{readTextContent}</System>
+        <System content="A">
+          <ShowMessage />
+        </System>
       </Repeat>
-      <System content="B">{readTextContent}</System>
+      <System content="B">
+        <ShowMessage />
+      </System>
     </GenerativeProvider>
   );
 
-  const { findByText, container, queryAllByText } = render(app);
+  const { findByText, queryAllByText } = render(app);
   const generative = getGenerative()!;
   await generative.waitUntilSettled();
   await findByText("B");
@@ -84,11 +89,17 @@ test("should render all iterations before next message", async () => {
 test("should not repeat when stopped", async () => {
   const renderApp = (stopped: boolean) => (
     <GenerativeProvider>
-      <System content="0">{readTextContent}</System>
+      <System content="0">
+        <ShowMessage />
+      </System>
       <Repeat stopped={stopped}>
-        <System content="2">{readTextContent}</System>
+        <System content="2">
+          <ShowMessage />
+        </System>
       </Repeat>
-      <System content="1">{readTextContent}</System>
+      <System content="1">
+        <ShowMessage />
+      </System>
     </GenerativeProvider>
   );
   const { findByText, queryAllByText } = render(renderApp(true));

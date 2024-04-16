@@ -4,15 +4,16 @@ import {
   GenerativeProvider,
   Message,
   MessageDelta,
-  GenerativeMessage,
   readTextContent,
   Repeat,
   System,
+  useMessage,
 } from "../src/index.js";
 import { sleep } from "openai/core";
 import { cleanup, findByText, render } from "@testing-library/react";
 import { ErrorBoundary } from "./util/ErrorBoundary.js";
 import { getGenerative, UseGenerative } from "./util/UseGenerative.js";
+import { ShowMessage } from "./util/show-message.js";
 
 afterEach(() => {
   // Clean up after each test
@@ -37,7 +38,7 @@ it("should call actions depth first", async () => {
           ]);
         }}
       >
-        Done
+        <div>Done</div>
       </Message>
     </GenerativeProvider>,
   );
@@ -128,22 +129,23 @@ test("should update message order when elements WITH KEYS are reordered", async 
   function Rotate({ children, offset = 0 }: any) {
     return children.slice(offset).concat(children.slice(0, offset));
   }
-
-  const renderContent = (message: GenerativeMessage) =>
-    readTextContent(message);
+  function PrintMessage() {
+    const { message } = useMessage();
+    return <div>{message && readTextContent(message)}</div>;
+  }
 
   const renderApp = (offset: number) => (
     <GenerativeProvider options={{ logLevel: "debug" }}>
       <UseGenerative />
       <Rotate offset={offset}>
         <System key="1" content="A">
-          {renderContent}
+          <PrintMessage />
         </System>
         <System key="2" content="B">
-          {renderContent}
+          <PrintMessage />
         </System>
         <System key="3" content="C">
-          {renderContent}
+          <PrintMessage />
         </System>
       </Rotate>
     </GenerativeProvider>
@@ -214,9 +216,15 @@ test("should update message order when elements WITHOUT KEYS are reordered", asy
     <GenerativeProvider options={{ logLevel: "debug" }}>
       <UseGenerative />
       <Rotate offset={offset}>
-        <System content="A">{readTextContent}</System>
-        <System content="B">{readTextContent}</System>
-        <System content="C">{readTextContent}</System>
+        <System content="A">
+          <ShowMessage />
+        </System>
+        <System content="B">
+          <ShowMessage />
+        </System>
+        <System content="C">
+          <ShowMessage />
+        </System>
       </Rotate>
     </GenerativeProvider>
   );
@@ -285,7 +293,9 @@ test("should render new elements when dynamically added or removed", async () =>
     <GenerativeProvider options={{ logLevel: "debug" }}>
       <UseGenerative />
       <Repeater times={times}>
-        <System content="A">{readTextContent}</System>
+        <System content="A">
+          <ShowMessage />
+        </System>
       </Repeater>
     </GenerativeProvider>
   );
@@ -378,7 +388,7 @@ test("should unlink messages when removed by conditional", async () => {
       </Show>
     </GenerativeProvider>
   );
-  const { rerender, container } = render(renderApp(true, true));
+  const { rerender } = render(renderApp(true, true));
   const generative = getGenerative()!;
   await generative.waitUntilSettled();
   let messages = generative.getAllMessages();
@@ -416,16 +426,18 @@ test("should wait for async message actions depth first", async () => {
       <UseGenerative />
       <Message type={() => after100ms("A")}>
         {(message) => (
-          <>
+          <div>
             {readTextContent(message) + getOrder("A")}
             <Message type={() => after100ms("B")}>
-              {(message) => readTextContent(message) + getOrder("B")}
+              {(message) => (
+                <div>{readTextContent(message) + getOrder("B")}</div>
+              )}
             </Message>
-          </>
+          </div>
         )}
       </Message>
       <System content="C">
-        {(message) => readTextContent(message) + getOrder("C")}
+        {(message) => <div>{readTextContent(message) + getOrder("C")}</div>}
       </System>
     </GenerativeProvider>
   );

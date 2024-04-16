@@ -15,6 +15,7 @@ import {
 import { render } from "@testing-library/react";
 import { getGenerative, UseGenerative } from "../util/UseGenerative.js";
 import { sleep } from "../../src/util/sleep.js";
+import { ShowMessage } from "../util/show-message.js";
 
 test("should display / then goto /second", async () => {
   function First() {
@@ -57,7 +58,9 @@ test("should display / then append /second", async () => {
   function First() {
     return (
       <>
-        <System content="A">{readTextContent}</System>
+        <System content="A">
+          <ShowMessage />
+        </System>
         <Message
           type={() => {
             // wait for async action before Goto
@@ -71,7 +74,11 @@ test("should display / then append /second", async () => {
   }
   function Second() {
     const data = useRouteData();
-    return <System content={data}>{readTextContent}</System>;
+    return (
+      <System content={data}>
+        <ShowMessage />
+      </System>
+    );
   }
   const routes: Routes = [
     { path: "/", component: <First /> },
@@ -95,20 +102,30 @@ test("should display / and then use Decision to append /second", async () => {
   function First() {
     return (
       <>
-        <System content="A">{readTextContent}</System>
+        <System content="A">
+          <ShowMessage />
+        </System>
         <Message
           type={() => {
             // wait for async action before Goto
             sleep(100);
           }}
         >
-          <Decision instruction="Select /second" operation="append" />
+          <Decision
+            api="openai"
+            instruction="Select /second"
+            operation="append"
+          />
         </Message>
       </>
     );
   }
   function Second() {
-    return <System content={"B"}>{readTextContent}</System>;
+    return (
+      <System content={"B"}>
+        <ShowMessage />
+      </System>
+    );
   }
   const routes: Routes = [
     { path: "/", component: <First /> },

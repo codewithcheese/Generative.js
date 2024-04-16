@@ -1,7 +1,11 @@
 import { ReactNode } from "react";
 import { getLogger } from "../util/log.js";
 import { GenerativeMessage } from "../message.js";
-import { useAfterChildren, useGenerative } from "../hooks/index.js";
+import {
+  ParentContext,
+  useAfterChildren,
+  useGenerative,
+} from "../hooks/index.js";
 
 type FallbackProps = {
   handler: (message: GenerativeMessage) => void;
@@ -24,7 +28,9 @@ export function Fallback({ handler, className, children }: FallbackProps) {
   });
   return (
     <div data-generative-id={id} ref={ref} className={className}>
-      {ready && children}
+      <ParentContext.Provider value={{ id }}>
+        {ready && children}
+      </ParentContext.Provider>
     </div>
   );
 }

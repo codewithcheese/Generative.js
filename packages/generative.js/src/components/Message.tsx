@@ -1,5 +1,5 @@
 import { createContext, DependencyList, FC, ReactNode } from "react";
-import { useGenerative } from "../hooks/index.js";
+import { ParentContext, useGenerative } from "../hooks/index.js";
 import { GenerativeElement, GenerativeMessage } from "../index.js";
 
 export const MessageContext = createContext<{
@@ -35,15 +35,18 @@ export function Message<MessageType extends GenerativeMessage>({
   });
 
   return (
-    <div data-generative-id={id} ref={ref} className={className}>
-      {ready && (
-        <MessageContext.Provider value={{ message, complete }}>
-          {typeof children === "function"
-            ? children(message!, complete)
-            : children}
-        </MessageContext.Provider>
-      )}
-    </div>
+    <>
+      <span data-generative-id={id} ref={ref} className={className}></span>
+      <ParentContext.Provider value={{ id }}>
+        {ready && (
+          <MessageContext.Provider value={{ message, complete }}>
+            {typeof children === "function"
+              ? children(message!, complete)
+              : children}
+          </MessageContext.Provider>
+        )}
+      </ParentContext.Provider>
+    </>
   );
 }
 

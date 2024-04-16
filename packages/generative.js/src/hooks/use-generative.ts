@@ -1,4 +1,5 @@
 import {
+  createContext,
   DependencyList,
   MutableRefObject,
   useContext,
@@ -12,43 +13,52 @@ import { GenerativeContext, NodeStatus } from "../index.js";
 import { getLogger } from "../util/log.js";
 import { GenerativeMessage } from "../message.js";
 
+export const ParentContext = createContext<{ id: string }>(null!);
+
 type AncestorRecord = { id: string; type: "parent" | "sibling" };
 
-export function findDOMAncestor(
+export function findAncestor(
   element: HTMLElement,
-  attrName: string = "data-generative-id",
+  parentId: string,
 ): AncestorRecord {
-  const root = { id: "root", type: "parent" as const };
   // Check previous siblings
   let sibling = element.previousElementSibling;
   while (sibling) {
     if (sibling.getAttribute("data-generative-provider")) {
       // stop at closest provider
-      return root;
+      break;
     }
-    const id = sibling.getAttribute(attrName);
-    if (id != null) {
-      return { id, type: "sibling" };
+    const siblingId = sibling.getAttribute("data-generative-id");
+    if (
+      siblingId != null &&
+      // if share the same parent then is sibling
+      siblingId.startsWith(parentId) &&
+      parentId !== siblingId
+    ) {
+      return { id: siblingId, type: "sibling" };
     }
     sibling = sibling.previousElementSibling;
   }
 
-  // Check parent elements
-  let parent = element.parentElement;
-  while (parent) {
-    if (parent.getAttribute("data-generative-provider")) {
-      // stop at closest provider
-      return root;
-    }
-    const id = parent.getAttribute(attrName);
-    if (id != null) {
-      return { id, type: "parent" };
-    }
-    parent = parent.parentElement;
-  }
+  // if no siblings then parent is ancestor
+  return { id: parentId, type: "parent" };
 
-  // No matching element found
-  return root;
+  // // Check parent elements
+  // let parent = element.parentElement;
+  // while (parent) {
+  //   if (parent.getAttribute("data-generative-provider")) {
+  //     // stop at closest provider
+  //     return root;
+  //   }
+  //   const id = parent.getAttribute("data-generative-id");
+  //   if (id != null && id === parentId) {
+  //     return { id, type: "parent" };
+  //   }
+  //   parent = parent.parentElement;
+  // }
+
+  // no sibling no parent
+  // return root;
 }
 
 export type useGenerativeProps<MessageType extends GenerativeMessage> = {
@@ -75,7 +85,9 @@ export function useGenerative<MessageType extends GenerativeMessage>({
   onMessage,
 }: useGenerativeProps<MessageType>): useGenerativeReturnType<MessageType> {
   const logger = getLogger("useGenerative");
-  const id = useId();
+  const parent = useContext(ParentContext);
+  const parentId = parent.id;
+  const id = parentId + "/" + useId();
   const ref = useRef<HTMLDivElement>(null);
   const [status, setStatus] = useState<NodeStatus>("PENDING");
   const [ancestor, setAncestor] = useState<AncestorRecord | null>(null);
@@ -102,7 +114,7 @@ export function useGenerative<MessageType extends GenerativeMessage>({
       logger.error("data-generative-id attribute not set", ref.current);
       throw Error("useGenerative: data-generative-id attribute not set");
     }
-    const ancestor = findDOMAncestor(ref.current);
+    const ancestor = findAncestor(ref.current, parentId);
     setAncestor(ancestor);
     const element = generative.upsert({
       id,
@@ -161,7 +173,7 @@ export function useGenerative<MessageType extends GenerativeMessage>({
     if (!ancestor) {
       return;
     }
-    const currentAncestor = findDOMAncestor(ref.current);
+    const currentAncestor = findAncestor(ref.current, parentId);
     if (currentAncestor.id !== ancestor.id) {
       setAncestor(currentAncestor);
       generative.updateAncestor(id, typeName, currentAncestor, ancestor);
