@@ -28,7 +28,6 @@ import { MessageCreateParamsBase } from "@anthropic-ai/sdk/resources/messages";
 
 export type AnthropicAssistantProps = {
   content?: string; // set content to use Assistant as literal, no completion will be requested
-  className?: string;
   model?: MessageCreateParamsBase["model"];
   toolChoice?: "auto" | "none" | Tool<any>;
   tools?: Tool<any>[];
@@ -40,7 +39,6 @@ export type AnthropicAssistantProps = {
 
 export function AnthropicAssistant({
   content,
-  className,
   model = "claude-3-haiku-20240307",
   toolChoice = "auto",
   tools = [],
@@ -65,7 +63,6 @@ export function AnthropicAssistant({
   );
   return (
     <Message<AssistantMessage>
-      className={className}
       type={content ? { role: "assistant", content } : action}
       typeName="Assistant"
       onMessage={onMessage}
