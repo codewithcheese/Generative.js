@@ -1,4 +1,4 @@
-# @generative.js/minimal-chat
+# @generative.js/examples
 
 ## 0.0.3
 

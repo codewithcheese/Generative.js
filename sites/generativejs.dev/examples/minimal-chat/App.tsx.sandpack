@@ -1,3 +1,0 @@
-export default function App(): JSX.Element {
-  return <h1>Hello Tom</h1>
-}

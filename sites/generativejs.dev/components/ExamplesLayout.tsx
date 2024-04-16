@@ -46,7 +46,7 @@ export function ExamplesLayout() {
           {examples.map((example) => (
             <div
               onClick={() => switchExample(example)}
-              className="flex border border-gray-100 dark:border-gray-800 p-4 hover:bg-gray-50 hover:dark:bg-gray-900"
+              className="flex font-mono border border-gray-100 dark:border-gray-800 p-4 hover:bg-gray-50 hover:dark:bg-gray-900"
             >
               <h1>{example.name}</h1>
             </div>
@@ -60,6 +60,7 @@ export function ExamplesLayout() {
           customSetup={{
             dependencies: {
               "generative.js": "latest",
+              "react-error-boundary": "^4.0.13",
             },
           }}
           theme={isDark ? "dark" : "light"}

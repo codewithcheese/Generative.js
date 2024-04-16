@@ -4,9 +4,10 @@
   "version": "0.0.1",
   "description": "Generative.js docs",
   "scripts": {
-    "dev": "next dev",
+    "dev": "pnpm run prepare && next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "prepare": "node prepare-examples.js"
   },
   "license": "Apache-2.0",
   "dependencies": {
