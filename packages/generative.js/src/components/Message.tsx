@@ -15,13 +15,11 @@ export type MessageRenderFunc<MessageType extends GenerativeMessage> = (
 export function Message<MessageType extends GenerativeMessage>({
   type,
   typeName,
-  className,
   children,
   deps = [],
   onMessage,
   onAfterChildren,
 }: {
-  className?: string;
   type: GenerativeElement["type"];
   typeName?: string;
   children?: ReactNode | MessageRenderFunc<MessageType>;
@@ -39,7 +37,7 @@ export function Message<MessageType extends GenerativeMessage>({
 
   return (
     <>
-      <span data-generative-id={id} ref={ref} className={className}></span>
+      <span data-generative-id={id} ref={ref}></span>
       <ParentContext.Provider value={{ id }}>
         {ready && (
           <MessageContext.Provider value={{ message, complete }}>

@@ -5,12 +5,10 @@ import { SystemMessage } from "../message.js";
 export function System({
   content,
   children,
-  className,
   onMessage,
 }: {
   content: string;
   children?: ReactNode | ((message: SystemMessage) => ReactNode);
-  className?: string;
   onMessage?: (message: SystemMessage) => void;
 }) {
   const message = useMemo(
@@ -23,7 +21,6 @@ export function System({
       type={message}
       typeName="System"
       deps={deps}
-      className={className}
       onMessage={onMessage}
     >
       {children}

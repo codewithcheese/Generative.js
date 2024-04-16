@@ -5,12 +5,10 @@ import { Message } from "./Message.js";
 export function User({
   content,
   children,
-  className,
   onMessage,
 }: {
   content?: UserMessage["content"];
   children?: ReactNode | ((message: UserMessage) => ReactNode);
-  className?: string;
   onMessage?: (message: UserMessage) => void;
 }) {
   const type = useMemo(
@@ -20,7 +18,6 @@ export function User({
   const deps = useMemo(() => [content], [content]);
   return (
     <Message<UserMessage>
-      className={className}
       type={type}
       typeName="User"
       deps={deps}
