@@ -4,7 +4,6 @@ import {
   createWorker,
   GenerativeProvider,
   Message,
-  readTextContent,
   System,
   WorkerPool,
 } from "../src/index.js";

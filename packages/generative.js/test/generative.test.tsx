@@ -1,11 +1,6 @@
 /* @vitest-environment jsdom */
 import { test } from "vitest";
-import {
-  GenerativeProvider,
-  readTextContent,
-  System,
-  User,
-} from "../src/index.js";
+import { GenerativeProvider, System, User } from "../src/index.js";
 import { getGenerative, UseGenerative } from "./util/UseGenerative.js";
 import { render } from "@testing-library/react";
 import { ShowMessage } from "./util/show-message.js";

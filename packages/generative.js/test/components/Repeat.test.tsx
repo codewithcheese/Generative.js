@@ -78,7 +78,7 @@ test("should render all iterations before next message", async () => {
     </GenerativeProvider>
   );
 
-  const { findByText, container, queryAllByText } = render(app);
+  const { findByText, queryAllByText } = render(app);
   const generative = getGenerative()!;
   await generative.waitUntilSettled();
   await findByText("B");
