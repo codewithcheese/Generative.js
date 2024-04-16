@@ -18,7 +18,7 @@ type FallbackProps = {
  */
 export function Fallback({ handler, className, children }: FallbackProps) {
   const logger = getLogger("Fallback");
-  const { ref, id, parentId, element, ready } = useGenerative({
+  const { ref, id, element, ready } = useGenerative({
     type: "NOOP",
     typeName: "Fallback",
   });
@@ -27,12 +27,7 @@ export function Fallback({ handler, className, children }: FallbackProps) {
     handler(messages[messages.length - 1]!);
   });
   return (
-    <div
-      data-generative-id={id}
-      data-generative-parent-id={parentId}
-      ref={ref}
-      className={className}
-    >
+    <div data-generative-id={id} ref={ref} className={className}>
       <ParentContext.Provider value={{ id }}>
         {ready && children}
       </ParentContext.Provider>

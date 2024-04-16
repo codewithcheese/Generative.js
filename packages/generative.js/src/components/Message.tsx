@@ -27,22 +27,16 @@ export function Message<MessageType extends GenerativeMessage>({
   deps?: DependencyList;
   onMessage?: (message: MessageType) => void;
 }) {
-  const { id, parentId, ref, message, ready, complete } =
-    useGenerative<MessageType>({
-      type,
-      typeName,
-      deps,
-      onMessage,
-    });
+  const { id, ref, message, ready, complete } = useGenerative<MessageType>({
+    type,
+    typeName,
+    deps,
+    onMessage,
+  });
 
   return (
     <>
-      <span
-        data-generative-id={id}
-        data-generative-parent-id={parentId}
-        ref={ref}
-        className={className}
-      ></span>
+      <span data-generative-id={id} ref={ref} className={className}></span>
       <ParentContext.Provider value={{ id }}>
         {ready && (
           <MessageContext.Provider value={{ message, complete }}>

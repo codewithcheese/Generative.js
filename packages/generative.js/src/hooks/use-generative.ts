@@ -28,13 +28,14 @@ export function findAncestor(
       // stop at closest provider
       break;
     }
-    const id = sibling.getAttribute("data-generative-id");
+    const siblingId = sibling.getAttribute("data-generative-id");
     if (
-      id != null &&
+      siblingId != null &&
       // if share the same parent then is sibling
-      sibling.getAttribute("data-generative-parent-id") === parentId
+      siblingId.startsWith(parentId) &&
+      parentId !== siblingId
     ) {
-      return { id, type: "sibling" };
+      return { id: siblingId, type: "sibling" };
     }
     sibling = sibling.previousElementSibling;
   }
@@ -69,7 +70,6 @@ export type useGenerativeProps<MessageType extends GenerativeMessage> = {
 
 export type useGenerativeReturnType<MessageType extends GenerativeMessage> = {
   id: string;
-  parentId: string | null;
   ref: MutableRefObject<any>;
   element: GenerativeElement | null;
   message: MessageType | null;
@@ -85,9 +85,9 @@ export function useGenerative<MessageType extends GenerativeMessage>({
   onMessage,
 }: useGenerativeProps<MessageType>): useGenerativeReturnType<MessageType> {
   const logger = getLogger("useGenerative");
-  const id = useId();
   const parent = useContext(ParentContext);
   const parentId = parent.id;
+  const id = parentId + "/" + useId();
   const ref = useRef<HTMLDivElement>(null);
   const [status, setStatus] = useState<NodeStatus>("PENDING");
   const [ancestor, setAncestor] = useState<AncestorRecord | null>(null);
@@ -190,5 +190,5 @@ export function useGenerative<MessageType extends GenerativeMessage>({
     status === "STREAMING" || status === "RESOLVED" || status === "FINALIZED";
   const complete = status === "RESOLVED" || status === "FINALIZED";
 
-  return { id, parentId, ref, status, element, message, ready, complete };
+  return { id, ref, status, element, message, ready, complete };
 }

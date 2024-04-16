@@ -23,7 +23,7 @@ export function Repeat({
   children,
 }: RepeatProps) {
   const logger = getLogger("Repeat");
-  const { id, parentId, ref, element, ready, complete } = useGenerative({
+  const { id, ref, element, ready, complete } = useGenerative({
     type: "NOOP",
     typeName: "Repeat",
   });
@@ -57,12 +57,7 @@ export function Repeat({
   });
 
   return (
-    <div
-      data-generative-id={id}
-      data-generative-parent-id={parentId}
-      ref={ref}
-      className={className}
-    >
+    <div data-generative-id={id} ref={ref} className={className}>
       <ParentContext.Provider value={{ id }}>
         {ready &&
           Array(iteration)
