@@ -1,4 +1,11 @@
 {
+  "examples": {
+    "title": "Examples",
+    "type": "page",
+    "theme": {
+      "layout": "full"
+    }
+  },
   "contact": {
     "title": "Contact ↗",
     "type": "page",
@@ -9,5 +16,4 @@
     "title": "Quickstart"
   },
   "concepts": "Concepts"
-
 }
