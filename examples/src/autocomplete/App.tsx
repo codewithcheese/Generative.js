@@ -13,9 +13,7 @@ export default function App() {
   const [value, setValue] = useState("");
   return (
     <ErrorBoundary
-      fallbackRender={(props) =>
-        props.error?.message || "Unknown error. Check the console."
-      }
+      fallbackRender={(props) => props.error?.message || "Unknown error. Check the console."}
     >
       <label htmlFor="ice-cream-choice">Favorite ice cream flavor: </label>
       <input
@@ -24,24 +22,12 @@ export default function App() {
         placeholder="Enter flavor"
         onChange={(e) => setValue(e.target.value)}
       />
-      <AutoComplete
-        id="ice-cream-flavors"
-        value={value}
-        item="ice cream flavor"
-      />
+      <AutoComplete id="ice-cream-flavors" value={value} item="ice cream flavor" />
     </ErrorBoundary>
   );
 }
 
-function AutoComplete({
-  id,
-  value,
-  item,
-}: {
-  id: string;
-  value: string;
-  item: string;
-}) {
+function AutoComplete({ id, value, item }: { id: string; value: string; item: string }) {
   const system = `
     Reply with JSON. 
     JSONSchema: { suggestions: { type: 'array', items: { type: 'string' } } }

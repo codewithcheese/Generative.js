@@ -1,11 +1,5 @@
 import { FormEvent, ReactNode, useState } from "react";
-import {
-  Assistant,
-  GenerativeProvider,
-  readTextContent,
-  useMessage,
-  User,
-} from "generative.js";
+import { Assistant, GenerativeProvider, readTextContent, useMessage, User } from "generative.js";
 import { ErrorBoundary } from "react-error-boundary";
 
 function Chat() {
@@ -46,9 +40,7 @@ function MessageBubble() {
 export default function App() {
   return (
     <ErrorBoundary
-      fallbackRender={(props) =>
-        props.error?.message || "Unknown error. Check the console."
-      }
+      fallbackRender={(props) => props.error?.message || "Unknown error. Check the console."}
     >
       <GenerativeProvider>
         <Chat />
