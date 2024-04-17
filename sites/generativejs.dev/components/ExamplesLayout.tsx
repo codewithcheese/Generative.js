@@ -40,7 +40,7 @@ export function ExamplesLayout() {
   }, []);
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-[calc(100vh-80px)]">
       <div className="w-[24ch]">
         <div className="flex-col m-2 space-y-2">
           {examples.map((example) => (

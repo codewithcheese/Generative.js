@@ -17,20 +17,18 @@ export default function App() {
         props.error?.message || "Unknown error. Check the console."
       }
     >
-      <GenerativeProvider>
-        <label htmlFor="ice-cream-choice">Favorite ice cream flavor: </label>
-        <input
-          list="ice-cream-flavors"
-          id="ice-cream-choice"
-          placeholder="Enter flavor"
-          onChange={(e) => setValue(e.target.value)}
-        />
-        <AutoComplete
-          id="ice-cream-flavors"
-          value={value}
-          item="ice cream flavor"
-        />
-      </GenerativeProvider>
+      <label htmlFor="ice-cream-choice">Favorite ice cream flavor: </label>
+      <input
+        list="ice-cream-flavors"
+        id="ice-cream-choice"
+        placeholder="Enter flavor"
+        onChange={(e) => setValue(e.target.value)}
+      />
+      <AutoComplete
+        id="ice-cream-flavors"
+        value={value}
+        item="ice cream flavor"
+      />
     </ErrorBoundary>
   );
 }
