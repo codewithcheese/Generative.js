@@ -28,13 +28,13 @@ function Chat() {
   }
 
   return (
-    <>
-      <div>{elements}</div>
+    <div>
+      {elements}
       <form onSubmit={submitMessage}>
-        <input name="text" type="text" />
+        <input name="text" type="text" placeholder="Enter message..." />
         <button type="submit">Submit</button>
       </form>
-    </>
+    </div>
   );
 }
 
