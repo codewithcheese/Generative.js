@@ -77,9 +77,11 @@ function AutoComplete({
 
 function Options() {
   const { message, complete } = useMessage<AssistantMessage>();
+  // todo partial parsing of streaming message
   if (!complete || !message || !message.content) {
-    return <></>;
+    return null;
   }
+  // todo validate response
   const response = JSON.parse(message.content);
   return response.suggestions.map((s: string, index: number) => (
     <option key={index} value={s}></option>
