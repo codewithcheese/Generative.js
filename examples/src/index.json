@@ -3,5 +3,10 @@
         "name": "Chat MVP",
         "slug": "chat-mvp",
         "files": ["App.tsx"]
+    },
+    {
+        "name": "Infinite AutoComplete",
+        "slug": "autocomplete",
+        "files": ["App.tsx"]
     }
 ]
