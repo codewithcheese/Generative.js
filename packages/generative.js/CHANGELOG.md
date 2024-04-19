@@ -1,5 +1,11 @@
 # generative.js
 
+## 0.0.8
+
+### Patch Changes
+
+- 124a654: Add `use client` declaration to client components for RSC support
+
 ## 0.0.7
 
 ### Patch Changes
