@@ -7,7 +7,7 @@ import Anthropic, {
   ClientOptions as AnthropicClientOptions,
 } from "@anthropic-ai/sdk";
 import "../util/readable-stream-polyfill.js";
-import { ReactNode, useCallback } from "react";
+import { ReactNode, useCallback, useMemo } from "react";
 import { ActionType } from "../action.js";
 import { Message, MessageRenderFunc } from "./Message.js";
 import { Tool } from "../index.js";
@@ -35,6 +35,7 @@ export type AnthropicAssistantProps = {
   clientOptions?: Partial<AnthropicClientOptions>;
   children?: ReactNode | MessageRenderFunc<AssistantMessage>;
   onMessage?: (message: AssistantMessage) => void;
+  key?: string;
 };
 
 export function AnthropicAssistant({
@@ -46,6 +47,7 @@ export function AnthropicAssistant({
   clientOptions = {},
   children,
   onMessage,
+  key,
 }: AnthropicAssistantProps) {
   const action = useCallback<ActionType>(
     async ({ messages, signal }) => {
@@ -61,8 +63,11 @@ export function AnthropicAssistant({
     },
     [model, requestOptions, clientOptions, tools, toolChoice],
   );
+  const deps = useMemo(() => [content], [content]);
   return (
     <Message<AssistantMessage>
+      key={key}
+      deps={deps}
       type={content ? { role: "assistant", content } : action}
       typeName="Assistant"
       onMessage={onMessage}

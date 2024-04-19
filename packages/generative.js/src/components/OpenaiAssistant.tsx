@@ -6,7 +6,7 @@ import {
 import { ClientOptions, OpenAI } from "openai";
 import { object } from "../util/object.js";
 import "../util/readable-stream-polyfill.js";
-import { ReactNode, useCallback } from "react";
+import { ReactNode, useCallback, useMemo } from "react";
 import { ActionType } from "../action.js";
 import { Message, MessageRenderFunc } from "./Message.js";
 import { ChatCompletionCreateParamsStreaming } from "openai/resources/index";
@@ -22,6 +22,7 @@ export type OpenaiAssistantProps = {
   clientOptions?: ClientOptions;
   children?: ReactNode | MessageRenderFunc<AssistantMessage>;
   onMessage?: (message: AssistantMessage) => void;
+  key?: string;
 };
 
 export function OpenaiAssistant({
@@ -33,6 +34,7 @@ export function OpenaiAssistant({
   clientOptions = {},
   children,
   onMessage,
+  key,
 }: OpenaiAssistantProps) {
   const action = useCallback<ActionType>(
     async ({ messages, signal }) =>
@@ -47,8 +49,11 @@ export function OpenaiAssistant({
       }),
     [model, requestOptions, clientOptions, tools, toolChoice],
   );
+  const deps = useMemo(() => [content], [content]);
   return (
     <Message<AssistantMessage>
+      key={key}
+      deps={deps}
       type={content ? { role: "assistant", content } : action}
       typeName="Assistant"
       onMessage={onMessage}
