@@ -1,3 +1,4 @@
+"use client";
 import { Message, waitTurn } from "./Message.js";
 import { Worker } from "../worker.js";
 import { ReactNode, useEffect, useMemo } from "react";

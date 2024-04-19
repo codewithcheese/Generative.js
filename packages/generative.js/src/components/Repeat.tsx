@@ -1,3 +1,4 @@
+"use client";
 import { Fragment, ReactNode, useCallback, useState } from "react";
 import { getLogger } from "../util/log.js";
 import { Message } from "./Message.js";
