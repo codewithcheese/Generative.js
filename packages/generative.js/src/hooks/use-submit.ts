@@ -1,3 +1,4 @@
+"use client";
 import { useCallback, useContext } from "react";
 import { GenerativeContext } from "../index.js";
 

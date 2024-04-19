@@ -1,3 +1,4 @@
+"use client";
 import { createContext, DependencyList, FC, ReactNode } from "react";
 import { ParentContext, useGenerative } from "../hooks/index.js";
 import { GenerativeElement, GenerativeMessage } from "../index.js";

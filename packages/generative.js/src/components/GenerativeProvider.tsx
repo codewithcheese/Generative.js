@@ -1,3 +1,4 @@
+"use client";
 import { createContext, ReactNode, useId, useState } from "react";
 import { Generative, GenerativeOptions } from "../generative.js";
 import { GenerativeMessage } from "../message.js";

@@ -1,3 +1,4 @@
+"use client";
 import { useContext } from "react";
 import { MessageContext } from "../components/index.js";
 import { GenerativeMessage } from "../message.js";
