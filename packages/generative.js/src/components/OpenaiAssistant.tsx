@@ -23,6 +23,7 @@ export type OpenaiAssistantProps = {
   clientOptions?: ClientOptions;
   children?: ReactNode | MessageRenderFunc<AssistantMessage>;
   onMessage?: (message: AssistantMessage) => void;
+  loading?: ReactNode;
   key?: string;
 };
 
@@ -35,6 +36,7 @@ export function OpenaiAssistant({
   clientOptions = {},
   children,
   onMessage,
+  loading,
   key,
 }: OpenaiAssistantProps) {
   const action = useCallback<ActionType>(
@@ -58,6 +60,7 @@ export function OpenaiAssistant({
       type={content ? { role: "assistant", content } : action}
       typeName="Assistant"
       onMessage={onMessage}
+      loading={loading}
     >
       {children}
     </Message>

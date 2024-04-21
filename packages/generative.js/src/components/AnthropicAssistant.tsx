@@ -36,6 +36,7 @@ export type AnthropicAssistantProps = {
   clientOptions?: Partial<AnthropicClientOptions>;
   children?: ReactNode | MessageRenderFunc<AssistantMessage>;
   onMessage?: (message: AssistantMessage) => void;
+  loading?: ReactNode;
   key?: string;
 };
 
@@ -48,6 +49,7 @@ export function AnthropicAssistant({
   clientOptions = {},
   children,
   onMessage,
+  loading,
   key,
 }: AnthropicAssistantProps) {
   const action = useCallback<ActionType>(
@@ -72,6 +74,7 @@ export function AnthropicAssistant({
       type={content ? { role: "assistant", content } : action}
       typeName="Assistant"
       onMessage={onMessage}
+      loading={loading}
     >
       {children}
     </Message>

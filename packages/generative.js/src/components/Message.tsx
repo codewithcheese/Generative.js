@@ -19,6 +19,7 @@ export function Message<MessageType extends GenerativeMessage>({
   children,
   deps = [],
   onMessage,
+  loading,
   onAfterChildren,
 }: {
   type: GenerativeElement["type"];
@@ -26,6 +27,7 @@ export function Message<MessageType extends GenerativeMessage>({
   children?: ReactNode | MessageRenderFunc<MessageType>;
   deps?: DependencyList;
   onMessage?: (message: MessageType) => void;
+  loading?: ReactNode;
   onAfterChildren?: () => void;
 }) {
   const { id, ref, message, ready, complete } = useGenerative<MessageType>({
@@ -40,12 +42,14 @@ export function Message<MessageType extends GenerativeMessage>({
     <>
       <span data-generative-id={id} ref={ref}></span>
       <ParentContext.Provider value={{ id }}>
-        {ready && (
+        {ready ? (
           <MessageContext.Provider value={{ message, complete }}>
             {typeof children === "function"
               ? children(message!, complete)
               : children}
           </MessageContext.Provider>
+        ) : (
+          loading
         )}
       </ParentContext.Provider>
     </>
