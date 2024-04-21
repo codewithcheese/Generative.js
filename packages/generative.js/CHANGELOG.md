@@ -1,5 +1,12 @@
 # generative.js
 
+## 0.0.9
+
+### Patch Changes
+
+- 2f1b58d: Set Assistant default `api` to `openai`
+- 0b5a14c: Add Assistant `loading` prop to display loading element during request
+
 ## 0.0.8
 
 ### Patch Changes
