@@ -1,5 +1,13 @@
 # @generative.js/examples
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [2f1b58d]
+- Updated dependencies [0b5a14c]
+  - generative.js@0.0.9
+
 ## 0.0.4
 
 ### Patch Changes
